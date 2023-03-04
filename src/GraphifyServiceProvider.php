@@ -3,8 +3,8 @@
 namespace Ibnnajjaar\Graphify;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Ibnnajjaar\Graphify\Commands\GraphifyCommand;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class GraphifyServiceProvider extends PackageServiceProvider
 {

@@ -2,9 +2,9 @@
 
 namespace Ibnnajjaar\Graphify\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Ibnnajjaar\Graphify\GraphifyServiceProvider;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TestCase extends Orchestra
 {
