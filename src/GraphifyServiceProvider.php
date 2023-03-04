@@ -2,24 +2,15 @@
 
 namespace Ibnnajjaar\Graphify;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Ibnnajjaar\Graphify\Commands\GraphifyCommand;
+use Illuminate\Support\ServiceProvider;
 
-class GraphifyServiceProvider extends PackageServiceProvider
+class GraphifyServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    public function register()
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
-        $package
-            ->name('graphify')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_graphify_table')
-            ->hasCommand(GraphifyCommand::class);
+        $this->mergeConfigFrom(
+            __DIR__ . '../config/graphify.php',
+            'graphify'
+        );
     }
 }

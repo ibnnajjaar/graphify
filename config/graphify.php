@@ -1,6 +1,5 @@
 <?php
 
-// config for Ibnnajjaar/Graphify
 return [
-
+    'view_path' => __DIR__ . '../views/og-image',
 ];
