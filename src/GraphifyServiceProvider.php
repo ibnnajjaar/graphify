@@ -2,15 +2,16 @@
 
 namespace Ibnnajjaar\Graphify;
 
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class GraphifyServiceProvider extends ServiceProvider
+class GraphifyServiceProvider extends PackageServiceProvider
 {
-    public function register()
+    public function configurePackage(Package $package): void
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '../config/graphify.php',
-            'graphify'
-        );
+        $package
+            ->name('graphify')
+            ->hasConfigFile()
+            ->hasViews();
     }
 }

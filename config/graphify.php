@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'view_path' => __DIR__ . '../views/og-image',
+    'view_path' => 'graphify::graphify',
 ];

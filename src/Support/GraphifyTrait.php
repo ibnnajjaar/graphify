@@ -56,8 +56,9 @@ trait GraphifyTrait
 
     public function getGraphifyView(): View
     {
-        return view('web.print.graphify-image', [
-            'post' => $this
+        $view_path = config('graphify.view_path');
+        return view($view_path, [
+            'model' => $this
         ]);
     }
 
