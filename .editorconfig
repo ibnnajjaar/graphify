@@ -13,3 +13,13 @@ trim_trailing_whitespace = false
 
 [*.{yml,yaml}]
 indent_size = 2
+
+[*.php]
+ij_php_align_key_value_pairs = true
+ij_any_align_multiline_chained_methods = true
+ij_php_space_after_unary_not = true
+ij_php_phpdoc_wrap_long_lines = true
+ij_php_force_short_declaration_array_style = true
+ij_php_comma_after_last_array_element = true
+ij_php_import_sorting = by_length
+ij_php_blank_lines_between_imports = 0

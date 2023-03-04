@@ -1,0 +1,9 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "ordered_imports": {
+            "sort_algorithm": "length"
+        },
+        "ordered_traits": true
+    }
+}
