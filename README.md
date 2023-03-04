@@ -23,39 +23,44 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'view_path' => 'graphify::graphify',
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="graphify-views"
 ```
 
 ## Usage
 
+First you need to follow the instructions in spatie media library to add images for the model you are about to generate open graph images. This will usually be named Post or Article model.
+You can find their extensive documentation [here](https://spatie.be/docs/laravel-medialibrary/v10/installation-setup)
+
+### Preparing Your Model
+implement `HasGraphify` interface on your model and add the `GraphifyTrait` to the model as shown below.
+
 ```php
-$graphify = new Ibnnajjaar\Graphify();
-echo $graphify->echoPhrase('Hello, Ibnnajjaar!');
+
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Ibnnajjaar\Graphify\Support\HasGraphify;
+use Ibnnajjaar\Graphify\Support\GraphifyTrait;
+
+class Post extends Model implements HasMedia, HasGraphify
+{
+
+    use InteractsWithMedia;
+    use GraphifyTrait;
+    
+    // ...rest of the code
+}
+
 ```
 
-## Testing
+## Customizing the view
 
-```bash
-composer test
-```
+Coming soon...
 
-## Changelog
+## Regenerating OG Image On Selective Field Update
+Coming soon...
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+## Manually Triggering OG Image Generation
+Coming soon...
 
 ## Credits
 
