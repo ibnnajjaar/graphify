@@ -1,9 +1,9 @@
 <?php
+
 namespace Ibnnajjaar\Graphify\Support;
 
-use Spatie\Browsershot\Browsershot;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Browsershot\Browsershot;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -14,7 +14,7 @@ trait GraphifyTrait
 {
     public static function bootGraphifyTrait(): void
     {
-        static::created(function (HasGraphify $model){
+        static::created(function (HasGraphify $model) {
             $model->generateGraphify();
         });
 

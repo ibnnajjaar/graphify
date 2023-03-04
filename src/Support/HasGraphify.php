@@ -1,4 +1,5 @@
 <?php
+
 namespace Ibnnajjaar\Graphify\Support;
 
 interface HasGraphify
