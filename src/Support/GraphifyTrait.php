@@ -4,6 +4,7 @@ namespace Ibnnajjaar\Graphify\Support;
 
 use Illuminate\Contracts\View\View;
 use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -19,10 +20,17 @@ trait GraphifyTrait
         });
 
         static::updated(function (HasGraphify $model) {
-            if ($model->isDirty($model->getGraphifyFields()) || empty($model->graphify_image)) {
+            $image_field = $model->getImageField();
+            ray($image_field);
+            if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$image_field})) {
                 $model->generateGraphify();
             }
         });
+    }
+
+    public function getImageField(): string
+    {
+        return 'og_image_url';
     }
 
     public function getGraphifyFields(): array
@@ -47,11 +55,13 @@ trait GraphifyTrait
                             ->windowSize(1200, 630)
                             ->base64Screenshot();
 
-        $this->clearMediaCollection('graphify-image');
+        $disk = config('graphify.disk');
 
-        $this->addMediaFromBase64($image)
-             ->usingFileName($this->getGraphifyFileName())
-             ->toMediaCollection('graphify-image');
+        $file_name = Storage::disk($disk)->put($this->getGraphifyFileName(), base64_decode($image));
+        $this->og_image_url = $this->getGraphifyFileName();
+        $this->save();
+
+        ray($this->graphify_image);
     }
 
     public function getGraphifyView(): View
@@ -81,7 +91,22 @@ trait GraphifyTrait
     public function graphifyImage(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->getFirstMediaUrl('graphify-image')
+            get: function () {
+                $file_name = $this->getImageField();
+                $disk = config('graphify.disk');
+                if (Storage::disk($disk)->exists($this->{$file_name})) {
+                    return Storage::disk($disk)->url($this->{$file_name});
+                }
+
+                return $this->placeholder_og_image;
+            }
+        );
+    }
+
+    public function placeholderOgImage(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ''
         );
     }
 }
