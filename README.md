@@ -6,7 +6,7 @@
 Generating open graph images will be made easy with the use of this package.
 
 ## Documentation
-See the [documentation](https://nishan-solutions.gitbook.io/graphify/) for detailed installation and usage instructions.
+See the [documentation](https://ibnnajjaar.gitbook.io/graphify/) for detailed installation and usage instructions.
 
 ## What It Does
 
