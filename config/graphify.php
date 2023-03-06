@@ -20,6 +20,15 @@ return [
      */
     'media_prefix' => env('OG_IMAGE_MEDIA_PREFIX', ''),
 
+    /*
+     * Determines if a new open graph image will be generated automatically
+     * when a new resource is created.
+     */
     'generate_graphify_on_create' => true,
+
+    /*
+     * Determines if the open graph image will be regenerated automatically
+     * when a resource's graphify field is updated.
+     */
     'generate_graphify_on_update' => true,
 ];
