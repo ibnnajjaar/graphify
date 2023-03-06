@@ -53,7 +53,9 @@ trait GraphifyTrait
         $disk = config('graphify.disk_name');
         $og_image_url_field = $this->getOpenGraphImageUrlField();
 
-        Storage::disk($disk)->put($this->getGraphifyFileName(), base64_decode($image));
+        $path = config('graphify.media_prefix') . '/';
+        $file_name = $path . $this->getGraphifyFileName();
+        Storage::disk($disk)->put($file_name, base64_decode($image));
         $this->{$og_image_url_field} = $this->getGraphifyFileName();
         $this->save();
     }
@@ -75,10 +77,14 @@ trait GraphifyTrait
     {
         return Attribute::make(
             get: function () {
-                $file_name = $this->getOpenGraphImageUrlField();
+
+                $path = config('graphify.media_prefix') . '/';
+                $field_name = $this->getOpenGraphImageUrlField();
+                $file_name = $path . $this->{$field_name};
                 $disk = config('graphify.disk_name');
-                if (Storage::disk($disk)->exists($this->{$file_name})) {
-                    return Storage::disk($disk)->url($this->{$file_name});
+
+                if (Storage::disk($disk)->exists($file_name)) {
+                    return Storage::disk($disk)->url($file_name);
                 }
 
                 return $this->placeholder_og_image;
