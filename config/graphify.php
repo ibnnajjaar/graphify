@@ -19,4 +19,7 @@ return [
      * to `/og-images`, all your media will be stored in a `/og-images` directory.
      */
     'media_prefix' => env('OG_IMAGE_MEDIA_PREFIX', ''),
+
+    'generate_graphify_on_create' => true,
+    'generate_graphify_on_update' => true,
 ];

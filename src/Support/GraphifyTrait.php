@@ -11,17 +11,22 @@ trait GraphifyTrait
 {
     public static function bootGraphifyTrait(): void
     {
-        static::created(function (HasGraphify $model) {
-            $model->generateGraphify();
-        });
 
-        static::updated(function (HasGraphify $model) {
-            $og_image_url_field = $model->getOpenGraphImageUrlField();
-
-            if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$og_image_url_field})) {
+        if (config('graphify.generate_graphify_on_create')) {
+            static::created(function (HasGraphify $model) {
                 $model->generateGraphify();
-            }
-        });
+            });
+        }
+
+        if (config('graphify.generate_graphify_on_update')) {
+            static::updated(function (HasGraphify $model) {
+                $og_image_url_field = $model->getOpenGraphImageUrlField();
+
+                if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$og_image_url_field})) {
+                    $model->generateGraphify();
+                }
+            });
+        }
     }
 
     public function getOpenGraphImageUrlField(): string
@@ -64,7 +69,7 @@ trait GraphifyTrait
     {
         $view_path = config('graphify.view_path');
         return view($view_path, [
-            'model' => $this
+            'model' => $this,
         ]);
     }
 
@@ -95,7 +100,7 @@ trait GraphifyTrait
     public function placeholderOgImage(): Attribute
     {
         return Attribute::make(
-            get: fn () => ''
+            get: fn() => ''
         );
     }
 }
