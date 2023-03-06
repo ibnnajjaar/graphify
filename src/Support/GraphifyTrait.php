@@ -6,10 +6,6 @@ use Illuminate\Contracts\View\View;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\InvalidBase64Data;
 
 trait GraphifyTrait
 {
@@ -20,15 +16,15 @@ trait GraphifyTrait
         });
 
         static::updated(function (HasGraphify $model) {
-            $image_field = $model->getImageField();
-            ray($image_field);
-            if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$image_field})) {
+            $og_image_url_field = $model->getOpenGraphImageUrlField();
+
+            if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$og_image_url_field})) {
                 $model->generateGraphify();
             }
         });
     }
 
-    public function getImageField(): string
+    public function getOpenGraphImageUrlField(): string
     {
         return 'og_image_url';
     }
@@ -42,12 +38,6 @@ trait GraphifyTrait
         return [];
     }
 
-    /**
-     * @throws FileCannotBeAdded
-     * @throws FileIsTooBig
-     * @throws FileDoesNotExist
-     * @throws InvalidBase64Data
-     */
     public function generateGraphify(): void
     {
         $view = $this->getGraphifyView();
@@ -55,13 +45,17 @@ trait GraphifyTrait
                             ->windowSize(1200, 630)
                             ->base64Screenshot();
 
-        $disk = config('graphify.disk');
+        $this->saveGraphify($image);
+    }
 
-        $file_name = Storage::disk($disk)->put($this->getGraphifyFileName(), base64_decode($image));
-        $this->og_image_url = $this->getGraphifyFileName();
+    public function saveGraphify($image): void
+    {
+        $disk = config('graphify.disk_name');
+        $og_image_url_field = $this->getOpenGraphImageUrlField();
+
+        Storage::disk($disk)->put($this->getGraphifyFileName(), base64_decode($image));
+        $this->{$og_image_url_field} = $this->getGraphifyFileName();
         $this->save();
-
-        ray($this->graphify_image);
     }
 
     public function getGraphifyView(): View
@@ -77,23 +71,12 @@ trait GraphifyTrait
         return $this->slug . '.png';
     }
 
-    public function registerGraphifyMediaCollection(): void
-    {
-        $this
-            ->addMediaCollection('graphify-image')
-            ->acceptsMimeTypes([
-                'image/jpeg',
-                'image/png',
-            ])
-            ->singleFile();
-    }
-
     public function graphifyImage(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $file_name = $this->getImageField();
-                $disk = config('graphify.disk');
+                $file_name = $this->getOpenGraphImageUrlField();
+                $disk = config('graphify.disk_name');
                 if (Storage::disk($disk)->exists($this->{$file_name})) {
                     return Storage::disk($disk)->url($this->{$file_name});
                 }

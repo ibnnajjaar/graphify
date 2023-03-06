@@ -5,62 +5,29 @@
 
 Generating open graph images will be made easy with the use of this package.
 
-## Installation
+## Documentation
+See the [documentation](https://nishan-solutions.gitbook.io/graphify/) for detailed installation and usage instructions.
 
-You can install the package via composer:
+## What It Does
 
-```bash
-composer require ibnnajjaar/graphify
-```
+### Generating Open Graph Images
+If the model preparation is done correctly, an OG Image will be created when a new record is created.
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="graphify-config"
-```
-
-This is the contents of the published config file:
-
+#### Manually Triggering OG Image Generation
+To manually trigger OG Image generation, you can call generateGraphify() method on your model instance as below.
 ```php
-return [
-    'view_path' => 'graphify::graphify',
-];
+$yourModel->generateGraphify();
 ```
 
-## Usage
-
-First you need to follow the instructions in spatie media library to add images for the model you are about to generate open graph images. This will usually be named Post or Article model.
-You can find their extensive documentation [here](https://spatie.be/docs/laravel-medialibrary/v10/installation-setup)
-
-### Preparing Your Model
-implement `HasGraphify` interface on your model and add the `GraphifyTrait` to the model as shown below.
-
+### Retrieving OG Images
+To retreive  a generated OG image, you can use the below methods.
 ```php
+$yourModel->graphify_image;
+$yourModel->og_image_url;
 
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Ibnnajjaar\Graphify\Support\HasGraphify;
-use Ibnnajjaar\Graphify\Support\GraphifyTrait;
-
-class Post extends Model implements HasMedia, HasGraphify
-{
-
-    use InteractsWithMedia;
-    use GraphifyTrait;
-    
-    // ...rest of the code
-}
-
+// Or if you have a custom image field
+$yourModel->your_custom_og_image_url;
 ```
-
-## Customizing the view
-
-Coming soon...
-
-## Regenerating OG Image On Selective Field Update
-Coming soon...
-
-## Manually Triggering OG Image Generation
-Coming soon...
 
 ## Credits
 
