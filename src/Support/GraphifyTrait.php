@@ -11,15 +11,14 @@ trait GraphifyTrait
 {
     public static function bootGraphifyTrait(): void
     {
-
         if (config('graphify.generate_graphify_on_create')) {
-            static::created(function (HasGraphify $model) {
+            static::creating(function (HasGraphify $model) {
                 $model->generateGraphify();
             });
         }
 
         if (config('graphify.generate_graphify_on_update')) {
-            static::updated(function (HasGraphify $model) {
+            static::updating(function (HasGraphify $model) {
                 $og_image_url_field = $model->getOpenGraphImageUrlField();
 
                 if ($model->isDirty($model->getGraphifyFields()) || empty($model->{$og_image_url_field})) {
@@ -62,7 +61,6 @@ trait GraphifyTrait
         $file_name = $path . $this->getGraphifyFileName();
         Storage::disk($disk)->put($file_name, base64_decode($image));
         $this->{$og_image_url_field} = $this->getGraphifyFileName();
-        $this->save();
     }
 
     public function getGraphifyView(): View
