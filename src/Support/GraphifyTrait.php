@@ -42,7 +42,7 @@ trait GraphifyTrait
         return [];
     }
 
-    public function generateGraphify(): void
+    public function generateGraphify(bool $save = false): void
     {
         $view = $this->getGraphifyView();
         $image = Browsershot::html($view)
@@ -50,6 +50,10 @@ trait GraphifyTrait
                             ->base64Screenshot();
 
         $this->saveGraphify($image);
+
+        if ($save) {
+            $this->save();
+        }
     }
 
     public function saveGraphify($image): void
